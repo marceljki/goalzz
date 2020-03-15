@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -45,8 +44,8 @@ public class CustomListAdapter extends ArrayAdapter {
 
         //this code sets the values of the objects to values from the arrays
         nameTV.setText(nameArray[position]);
-        repsTV.setText(repsArray[position]);
-        deadlineTV.setText(deadlineArray[position].toString());
+        repsTV.setText(String.valueOf(repsArray[position]));
+        deadlineTV.setText(Projects.DATEFORMAT.format(deadlineArray[position]));
 
         return rowView;
     }

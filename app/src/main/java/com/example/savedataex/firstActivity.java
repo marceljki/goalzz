@@ -3,8 +3,10 @@ package com.example.savedataex;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -26,7 +28,7 @@ public class firstActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
-        dbHandler = new MyDBHandler(this, null, null, 1);
+        dbHandler = new MyDBHandler(this, null, null, 4);
         projects = dbHandler.getProjects();
         // creating and initializing the arrays of deadline name and reps
         int number_of_projects = projects.size();
@@ -35,7 +37,8 @@ public class firstActivity extends AppCompatActivity {
         Date[] deadlineArray = new Date[number_of_projects];
 
 
-        // I guess the mistake is somewhere here; should be an endless loop or somethin
+
+
         for (int i = 0; i < number_of_projects;i++){
             Projects current = projects.get(i);
             nameArray[i] = current.getProjectname();
@@ -46,6 +49,11 @@ public class firstActivity extends AppCompatActivity {
         CustomListAdapter adapter = new CustomListAdapter(this,nameArray, repsArray,deadlineArray);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+    }
+
+    public void floatingAddButtonClicked(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 

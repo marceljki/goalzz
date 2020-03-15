@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,10 +14,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -43,10 +46,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         reps.addTextChangedListener(notnull);
         projectname.addTextChangedListener(notnull);
-
-        printDataBase();
-
-        System.out.println(dbHandler.getProjects().size());
     }
 
     private TextWatcher notnull = new TextWatcher() {
@@ -70,9 +69,27 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     // ATTENTION : Always give views a parameter so the onClick - Methods can be used
    public void addButtonClicked(View view){
-        project = new Projects(projectname.getText().toString(),Integer.parseInt(reps.getText().toString()),testDate);
-        dbHandler.addProject(project);
-        printDataBase();
+
+        if(testDate.before(new Date())){
+            showToast("Use a Deadline after today, you stupid lil fish");
+            showDeadline.setText("");
+        }
+        else {
+            // Add projects to database
+            project = new Projects(projectname.getText().toString(), Integer.parseInt(reps.getText().toString()), testDate);
+            try {
+                dbHandler.addProject(project);
+                // show a message
+                showToast(projectname.getText().toString() + " added");
+                // link to @firstactivity
+                Intent intent = new Intent(this, firstActivity.class);
+                startActivity(intent);
+                resetTextViews();
+            }catch (Exception e){
+                projectname.setError("Name already exists");
+            }
+
+        }
     }
 
     public void deadlineButtonClicked(View view){
@@ -97,15 +114,17 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     public void deleteButtonClicked(View view){
         dbHandler.deleteProduct(projectname.getText().toString());
-        printDataBase();
+        resetTextViews();
     }
 
-    public void printDataBase(){
-        String dbString = dbHandler.DBToString();
-        text.setText(dbString);
+    public void resetTextViews(){
         projectname.setText(""); // Set the projectname field to "" after pressing the button
         reps.setText("");
         showDeadline.setText("");
+    }
+
+    private void showToast(String string){
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
     }
 
 

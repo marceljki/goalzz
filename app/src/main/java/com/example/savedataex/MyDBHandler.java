@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import java.util.List;
 public class MyDBHandler extends SQLiteOpenHelper{
 
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "projects.db ";
     public static final String TABLE_PROJECTS = "projects";
     public static final String COLUMN_ID =  "_id";
@@ -28,7 +29,6 @@ public class MyDBHandler extends SQLiteOpenHelper{
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_DEADLINE = "deadline";
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
     public MyDBHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -38,8 +38,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
     @Override // The very first time the App is running; So create DB here
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_PROJECTS + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_PROJECT_NAME + " TEXT, " +
+                COLUMN_PROJECT_NAME + " TEXT PRIMARY KEY, " +
                 COLUMN_REPS + " INTEGER, "+
                 COLUMN_DEADLINE + " TEXT" +
                 ");";
@@ -62,13 +61,10 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         values.put(COLUMN_PROJECT_NAME, project.getProjectname());
         values.put(COLUMN_REPS, project.getReps());
-        values.put(COLUMN_DEADLINE, dateFormat.format(sqlDate));
-        // TODO There is a difference between this date and the date that is in getProjects
-
+        values.put(COLUMN_DEADLINE, Projects.DATEFORMAT.format(sqlDate));
 
         SQLiteDatabase db = getWritableDatabase();
-
-        db.insert(TABLE_PROJECTS, null, values);
+        db.insertOrThrow(TABLE_PROJECTS, null, values);
 
         db.close();
     }
@@ -111,7 +107,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
     // @returns all Projects that are currently in the database
     public List<Projects> getProjects(){
         if (dBisEmpty()){
-            return null;
+            return new ArrayList<Projects>();
         }
         List<Projects> projectsList = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
@@ -122,10 +118,9 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 int reps = cursor.getInt(cursor.getColumnIndex("reps"));
                 String deadString = cursor.getString(cursor.getColumnIndex("deadline"));
 
-                // converts the string date into date date
+                 // converts the string date into date date
                 try {
-                    java.util.Date dead = dateFormat.parse(deadString);
-                    // TODO date is wrong
+                    java.util.Date dead = Projects.DATEFORMAT.parse(deadString);
 
                     projectsList.add(new Projects(name, reps, dead));
                 } catch (Exception e) {
@@ -134,10 +129,6 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
             db.close();
         }
-//        // THATS JUST FOR DEBUGGING PLEASE DELETE LATER
-//        for (Projects p: projectsList){
-//            System.out.println(p.toString());
-//        }
 
         return projectsList;
     }

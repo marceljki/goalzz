@@ -9,7 +9,7 @@ public class Projects {
     private String projectname;
     private int reps;
     private java.util.Date deadline;
-    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    protected static final DateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public Projects(){
 
@@ -56,6 +56,6 @@ public class Projects {
 
     @Override
     public String toString(){
-        return "Name: "+projectname+"| Reps: "+ reps+"| Deadline: "+ dateFormat.format(deadline);
+        return "Name: "+projectname+"| Reps: "+ reps+"| Deadline: "+ DATEFORMAT.format(deadline);
     }
 }

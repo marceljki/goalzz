@@ -36,15 +36,9 @@ public class Products {
     }
 
     public static void main(String[] args) {
-        System.out.println("2020-03-28");
-        String deadString = "2020-03-28";
-        try {
-            dead = dateFormat.parse(deadString);
-        }
-        catch (Exception e){
-            System.out.println("something went wrong");
-        }
-        System.out.println(dead);
+
+        Date date = new Date();
+        System.out.println(date);
 
 
     }
