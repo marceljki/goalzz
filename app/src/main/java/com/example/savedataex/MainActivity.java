@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         setContentView(R.layout.activity_main);
         projectname = (EditText) findViewById(R.id.projectname);
         reps = (EditText) findViewById(R.id.reps);
-        text = (TextView) findViewById(R.id.textView);
         dbHandler = new MyDBHandler(this, null, null, 1);
         showDeadline = (TextView) findViewById(R.id.showDeadline);
         addButton = (Button) findViewById(R.id.addButton) ;

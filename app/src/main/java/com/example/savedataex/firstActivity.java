@@ -34,6 +34,7 @@ public class firstActivity extends AppCompatActivity {
         int number_of_projects = projects.size();
         String[] nameArray = new String[number_of_projects];
         int[] repsArray = new int[number_of_projects];
+        int[] currentRepsArray = new int[number_of_projects];
         Date[] deadlineArray = new Date[number_of_projects];
 
 
@@ -43,10 +44,11 @@ public class firstActivity extends AppCompatActivity {
             Projects current = projects.get(i);
             nameArray[i] = current.getProjectname();
             repsArray[i] = current.getReps();
+            currentRepsArray[i] = current.getCurrent_reps();
             deadlineArray[i] = current.getDeadline();
         }
 
-        CustomListAdapter adapter = new CustomListAdapter(this,nameArray, repsArray,deadlineArray);
+        CustomListAdapter adapter = new CustomListAdapter(this,nameArray, repsArray,currentRepsArray,deadlineArray);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
     }

@@ -21,12 +21,12 @@ import java.util.List;
 public class MyDBHandler extends SQLiteOpenHelper{
 
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "projects.db ";
     public static final String TABLE_PROJECTS = "projects";
-    public static final String COLUMN_ID =  "_id";
     public static final String COLUMN_PROJECT_NAME =  "projectname";
     public static final String COLUMN_REPS = "reps";
+    public static final String COLUMN_CURRENT_REPS = "current_reps";
     public static final String COLUMN_DEADLINE = "deadline";
 
 
@@ -40,6 +40,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         String query = "CREATE TABLE " + TABLE_PROJECTS + "(" +
                 COLUMN_PROJECT_NAME + " TEXT PRIMARY KEY, " +
                 COLUMN_REPS + " INTEGER, "+
+                COLUMN_CURRENT_REPS + " INTEGER DEFAULT 0," +
                 COLUMN_DEADLINE + " TEXT" +
                 ");";
 
@@ -61,6 +62,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         values.put(COLUMN_PROJECT_NAME, project.getProjectname());
         values.put(COLUMN_REPS, project.getReps());
+        values.put(COLUMN_CURRENT_REPS, project.getCurrent_reps());
         values.put(COLUMN_DEADLINE, Projects.DATEFORMAT.format(sqlDate));
 
         SQLiteDatabase db = getWritableDatabase();
@@ -114,15 +116,16 @@ public class MyDBHandler extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery("SELECT * FROM "+ TABLE_PROJECTS, null);
         while(cursor.moveToNext()) {
                 // gets all information
-                String name = cursor.getString(cursor.getColumnIndex("projectname"));
-                int reps = cursor.getInt(cursor.getColumnIndex("reps"));
-                String deadString = cursor.getString(cursor.getColumnIndex("deadline"));
+                String name = cursor.getString(cursor.getColumnIndex(COLUMN_PROJECT_NAME));
+                int reps = cursor.getInt(cursor.getColumnIndex(COLUMN_REPS));
+                int current_reps = cursor.getInt(cursor.getColumnIndex(COLUMN_CURRENT_REPS));
+                String deadString = cursor.getString(cursor.getColumnIndex(COLUMN_DEADLINE));
 
                  // converts the string date into date date
                 try {
                     java.util.Date dead = Projects.DATEFORMAT.parse(deadString);
 
-                    projectsList.add(new Projects(name, reps, dead));
+                    projectsList.add(new Projects(name, reps, current_reps, dead));
                 } catch (Exception e) {
                     System.out.println("Something went wrong");
                 }
