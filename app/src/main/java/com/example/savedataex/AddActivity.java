@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     EditText projectname;
     EditText reps;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add);
         projectname = (EditText) findViewById(R.id.projectname);
         reps = (EditText) findViewById(R.id.reps);
         dbHandler = new MyDBHandler(this, null, null, 1);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
    public void addButtonClicked(View view){
 
         if(testDate.before(new Date())){
-            showToast("Use a Deadline after today, you stupid lil fish");
+            showToast("Use a Deadline AFTER today, you stupid lil fish");
             showDeadline.setText("");
         }
         else {

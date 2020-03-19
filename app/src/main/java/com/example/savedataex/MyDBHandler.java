@@ -5,15 +5,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
-import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import androidx.annotation.Nullable;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -136,9 +133,38 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return projectsList;
     }
 
+     Projects getProjectbyName(String name){
+        String query = "SELECT * FROM " + TABLE_PROJECTS +
+                        " WHERE " + COLUMN_PROJECT_NAME + "=\"" + name + "\"";
+        SQLiteDatabase db = getReadableDatabase();
+        // Cursor to get the data of the requested row
+        Cursor data = db.rawQuery(query, null);
+        // Note: cursor starts at -1, so it is needed to step one step forward
+        data.moveToNext();
+       // Getting the data in the variables and creating a project
+        String pName = data.getString(data.getColumnIndex(COLUMN_PROJECT_NAME));
+        int reps = data.getInt(data.getColumnIndex(COLUMN_REPS));
+        int current_reps = data.getInt(data.getColumnIndex(COLUMN_CURRENT_REPS));
+        Date deadline = new Date();
+        try {
+             deadline = Projects.DATEFORMAT.parse(data.getString(data.getColumnIndex(COLUMN_DEADLINE)));
+        }
+        catch (Exception e){
+            System.out.println("Something went wrong in @getprojectbyname");
+        }
+        return new Projects(pName,reps,current_reps,deadline);
+    }
+
     private boolean dBisEmpty(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor mCursor = db.rawQuery("SELECT * FROM " + TABLE_PROJECTS, null);
         return (mCursor.getCount() == 0);
+    }
+
+    void increaseReps(String name, int newReps){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(COLUMN_CURRENT_REPS,newReps);
+        db.update(TABLE_PROJECTS,c, COLUMN_PROJECT_NAME + "=\"" + name + "\"", null);
     }
 }

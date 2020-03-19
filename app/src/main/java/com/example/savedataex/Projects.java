@@ -12,7 +12,7 @@ public class Projects {
     private int reps;
     private java.util.Date deadline;
     private int current_reps;
-    protected static final DateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    public static final DateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public Projects(){
 
