@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="Winner_green">#74C804</color>
     <color name="loser_grey">#999999</color>
+    <color name="lowGayGrey">#828283</color>
 </resources>

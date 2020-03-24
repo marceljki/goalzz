@@ -1,6 +1,8 @@
 package com.example.savedataex;
 
 
+import android.content.ContentValues;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,20 +14,27 @@ public class Projects {
     private int reps;
     private java.util.Date deadline;
     private int current_reps;
+    private int prev_reps;
+    private String description;
     public static final DateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public Projects(){
 
     }
-    public Projects(String projectname, int reps,int current_reps, java.util.Date deadline){
+    public Projects(String projectname, int reps,int current_reps,int prev_reps, java.util.Date deadline, String description){
         this.projectname = projectname;
         this.reps = reps;
         this.current_reps = current_reps;
+        this.prev_reps = prev_reps;
         this.deadline = deadline;
+        this.description = description;
+    }
+    public Projects(String projectname, int reps, java.util.Date deadline, String description){
+        this(projectname,reps,0,0,deadline,description);
     }
 
     public Projects(String projectname, int reps, java.util.Date deadline){
-        this(projectname,reps,0,deadline);
+        this(projectname,reps,deadline,"");
     }
 
         // **********************GETTER AND SETTER************************
@@ -35,6 +44,18 @@ public class Projects {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPrev_reps() {
+        return prev_reps;
+    }
+
+    public void setPrev_reps(int prev_reps) {
+        this.prev_reps = prev_reps;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public int getCurrent_reps() {

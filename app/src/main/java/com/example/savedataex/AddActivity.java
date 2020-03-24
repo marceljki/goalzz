@@ -25,7 +25,7 @@ import java.util.Date;
 public class AddActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     EditText projectname;
-    EditText reps;
+    EditText reps, description;
     TextView text, showDeadline;
     MyDBHandler dbHandler;
     Projects project;
@@ -42,7 +42,8 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         reps = (EditText) findViewById(R.id.reps);
         dbHandler = new MyDBHandler(this, null, null, 1);
         deadlineButton = (Button) findViewById(R.id.calender);
-        addButton = (Button) findViewById(R.id.addButton) ;
+        addButton = (Button) findViewById(R.id.addButton);
+        description = (EditText) findViewById(R.id.add_description);
 
         reps.addTextChangedListener(notnull);
         projectname.addTextChangedListener(notnull);
@@ -85,7 +86,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
             // Add projects to database
             // if project is already in DB (since the primary key is the name)
             // the DB throws a SQL Error and this method throws an error on the EditText
-            project = new Projects(projectname.getText().toString(), repsAsInt, testDate);
+            project = new Projects(projectname.getText().toString(), repsAsInt, testDate, description.getText().toString());
             try {
                 dbHandler.addProject(project);
                 // show a message

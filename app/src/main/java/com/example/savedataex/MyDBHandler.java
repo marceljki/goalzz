@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 
@@ -18,13 +19,15 @@ import java.util.List;
 public class MyDBHandler extends SQLiteOpenHelper{
 
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "projects.db ";
     public static final String TABLE_PROJECTS = "projects";
     public static final String COLUMN_PROJECT_NAME =  "projectname";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_CURRENT_REPS = "current_reps";
+    public static final String COLUMN_PREVIOUS_REPS = "prev_reps";
     public static final String COLUMN_DEADLINE = "deadline";
+    public static final String COLUMN_DESCRIPTION = "description";
 
 
 
@@ -38,7 +41,9 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 COLUMN_PROJECT_NAME + " TEXT PRIMARY KEY, " +
                 COLUMN_REPS + " INTEGER, "+
                 COLUMN_CURRENT_REPS + " INTEGER DEFAULT 0," +
-                COLUMN_DEADLINE + " TEXT" +
+                COLUMN_PREVIOUS_REPS + " INTEGER DEFAULT 0," +
+                COLUMN_DEADLINE + " TEXT," +
+                COLUMN_DESCRIPTION + " TEXT DEFAULT ''" +
                 ");";
 
         // ^^ this is now sql sourcecode
@@ -60,7 +65,9 @@ public class MyDBHandler extends SQLiteOpenHelper{
         values.put(COLUMN_PROJECT_NAME, project.getProjectname());
         values.put(COLUMN_REPS, project.getReps());
         values.put(COLUMN_CURRENT_REPS, project.getCurrent_reps());
+        values.put(COLUMN_PREVIOUS_REPS, project.getPrev_reps());
         values.put(COLUMN_DEADLINE, Projects.DATEFORMAT.format(sqlDate));
+        values.put(COLUMN_DESCRIPTION,project.getDescription());
 
         SQLiteDatabase db = getWritableDatabase();
         db.insertOrThrow(TABLE_PROJECTS, null, values);
@@ -116,13 +123,15 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 String name = cursor.getString(cursor.getColumnIndex(COLUMN_PROJECT_NAME));
                 int reps = cursor.getInt(cursor.getColumnIndex(COLUMN_REPS));
                 int current_reps = cursor.getInt(cursor.getColumnIndex(COLUMN_CURRENT_REPS));
+                int prev_reps = cursor.getInt(cursor.getColumnIndex(COLUMN_CURRENT_REPS));
                 String deadString = cursor.getString(cursor.getColumnIndex(COLUMN_DEADLINE));
+                String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
 
                  // converts the string date into date date
                 try {
                     java.util.Date dead = Projects.DATEFORMAT.parse(deadString);
 
-                    projectsList.add(new Projects(name, reps, current_reps, dead));
+                    projectsList.add(new Projects(name, reps, current_reps,prev_reps, dead, description));
                 } catch (Exception e) {
                     System.out.println("Something went wrong");
                 }
@@ -145,6 +154,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
         String pName = data.getString(data.getColumnIndex(COLUMN_PROJECT_NAME));
         int reps = data.getInt(data.getColumnIndex(COLUMN_REPS));
         int current_reps = data.getInt(data.getColumnIndex(COLUMN_CURRENT_REPS));
+        int prev_reps = data.getInt(data.getColumnIndex(COLUMN_PREVIOUS_REPS));
+        String description = data.getString(data.getColumnIndex(COLUMN_DESCRIPTION));
         Date deadline = new Date();
         try {
              deadline = Projects.DATEFORMAT.parse(data.getString(data.getColumnIndex(COLUMN_DEADLINE)));
@@ -152,7 +163,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         catch (Exception e){
             System.out.println("Something went wrong in @getprojectbyname");
         }
-        return new Projects(pName,reps,current_reps,deadline);
+        return new Projects(pName,reps,current_reps,prev_reps,deadline,description);
     }
 
     private boolean dBisEmpty(){
@@ -161,10 +172,22 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return (mCursor.getCount() == 0);
     }
 
-    void increaseReps(String name, int newReps){
+    void setRepsInDB(String name, int newReps){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues c = new ContentValues();
         c.put(COLUMN_CURRENT_REPS,newReps);
+        db.update(TABLE_PROJECTS,c, COLUMN_PROJECT_NAME + "=\"" + name + "\"", null);
+    }
+    void setColumnPreviousReps(String name, int prevReps){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(COLUMN_PREVIOUS_REPS,prevReps);
+        db.update(TABLE_PROJECTS,c, COLUMN_PROJECT_NAME + "=\"" + name + "\"", null);
+    }
+    void setColumnDescription(String name, String description){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues c = new ContentValues();
+        c.put(COLUMN_DESCRIPTION,description);
         db.update(TABLE_PROJECTS,c, COLUMN_PROJECT_NAME + "=\"" + name + "\"", null);
     }
 }

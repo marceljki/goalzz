@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:hint="Project Name"
       />
 
@@ -23,6 +23,7 @@
         android:id="@+id/reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Repetitions"
         android:inputType="number"
@@ -30,6 +31,7 @@
 
     <Button
         android:id="@+id/calender"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Choose Deadline"
@@ -38,6 +40,7 @@
         />
     <Button
         android:id="@+id/addButton"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="addButtonClicked"
@@ -45,6 +48,13 @@
         android:enabled="false"
         />
 
-
-
+    <EditText
+        android:id="@+id/add_description"
+        android:layout_marginTop="20dp"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:gravity="fill_horizontal"
+        android:hint="Description"
+        android:maxLength="200"
+        android:lines="5"/>
 </LinearLayout>

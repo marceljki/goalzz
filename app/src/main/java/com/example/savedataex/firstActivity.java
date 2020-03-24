@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -14,9 +16,11 @@ import java.util.List;
 
 public class firstActivity extends AppCompatActivity {
 
-     MyDBHandler dbHandler;
-     List<Projects> projects;
-     ListView listView;
+    MyDBHandler dbHandler;
+    List<Projects> projects;
+    ListView listView;
+    TextView startText;
+    ImageView startImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +36,23 @@ public class firstActivity extends AppCompatActivity {
         int[] currentRepsArray = new int[number_of_projects];
         Date[] deadlineArray = new Date[number_of_projects];
 
-        for (int i = 0; i < number_of_projects;i++){
+        for (int i = 0; i < number_of_projects; i++) {
             Projects current = projects.get(i);
             nameArray[i] = current.getProjectname();
             repsArray[i] = current.getReps();
             currentRepsArray[i] = current.getCurrent_reps();
             deadlineArray[i] = current.getDeadline();
         }
+        if (number_of_projects == 0){
+            startText = (TextView) findViewById(R.id.startTextView);
+            startImage = (ImageView) findViewById(R.id.startImage);
+            startText.setText("Add a new Project here -->");
+            int resource = getResources().getIdentifier("@drawable/goalz_logo",null,this.getPackageName());
+            startImage.setImageResource(resource);
 
-        CustomListAdapter adapter = new CustomListAdapter(this,nameArray, repsArray,currentRepsArray,deadlineArray);
+        }
+
+        CustomListAdapter adapter = new CustomListAdapter(this, nameArray, repsArray, currentRepsArray, deadlineArray);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
 
@@ -57,7 +69,7 @@ public class firstActivity extends AppCompatActivity {
         });
     }
 
-    public void floatingAddButtonClicked(View view){
+    public void floatingAddButtonClicked(View view) {
         Intent intent = new Intent(this, AddActivity.class);
         startActivity(intent);
     }
