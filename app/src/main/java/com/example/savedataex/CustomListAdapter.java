@@ -1,6 +1,8 @@
 package com.example.savedataex;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class CustomListAdapter extends ArrayAdapter {
+
+    final static String WINNER_GREEN = "#74C804";
+    final static String LOSER_GREY = "#999999";
 
     //to reference the Activity
     private final Activity context;
@@ -46,18 +51,27 @@ public class CustomListAdapter extends ArrayAdapter {
         TextView repsTV = (TextView) rowView.findViewById(R.id.repsTV);
         TextView deadlineTV = (TextView) rowView.findViewById(R.id.deadlineTV);
         ProgressBar progressBar = (ProgressBar) rowView.findViewById(R.id.progressBar);
+        View rowViewDisplay = (View) rowView.findViewById(R.id.rowViewDisplay);
 
         // Setting up the progress bar
         progressBar.setMax(repsArray[position]);
         progressBar.setProgress(currentRepsArray[position]);
 
         //this code sets the values of the objects to values from the arrays
+        String repsOutOf = currentRepsArray[position] + "/" + repsArray[position];
         nameTV.setText(nameArray[position]);
-        String repsOutOf = currentRepsArray[position]+"/"+repsArray[position];
+        if (currentRepsArray[position]>=repsArray[position]){
+            repsOutOf = "MISSON COMPLETED";
+            rowViewDisplay.setBackgroundColor(Color.parseColor(WINNER_GREEN));
+        }
         repsTV.setText(repsOutOf);
         String days = days_left(deadlineArray[position])+ " days left";
-        deadlineTV.setText(days);
+        if (days_left(deadlineArray[position])<0){
+            days = "EXPIRED";
+            rowViewDisplay.setBackgroundColor(Color.parseColor(LOSER_GREY));
+        }
 
+        deadlineTV.setText(days);
         return rowView;
     }
 

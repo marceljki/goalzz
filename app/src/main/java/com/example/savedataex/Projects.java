@@ -71,11 +71,14 @@ public class Projects {
     // ********************GETTER AND SETTER EEEEND**************************
 
     // calculates the days left to the deadline
-    public int days_left(){
+     int days_left(){
        Date date = new Date();
        long difference = deadline.getTime()-date.getTime();
        int days_left = (int) TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
        return days_left;
+    }
+    boolean expired(){
+        return (this.days_left() < 0);
     }
 
     @Override

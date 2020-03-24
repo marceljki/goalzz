@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-
+        android:layout_marginTop="150dp"
         android:hint="Project Name"
       />
 
@@ -27,13 +27,6 @@
         android:hint="Repetitions"
         android:inputType="number"
          />
-
-    <TextView
-        android:id="@+id/showDeadline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="DeadLine"
-        />
 
     <Button
         android:id="@+id/calender"
@@ -52,12 +45,6 @@
         android:enabled="false"
         />
 
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="deleteButtonClicked"
-        android:text="DELETE" />
 
 
 </LinearLayout>

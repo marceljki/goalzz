@@ -4,13 +4,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_target"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_target_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DisplayProject"></activity>
-        <activity android:name=".Main2Activity" />
         <activity android:name=".firstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".AddActivity"></activity>
     </application>
 
 </manifest>

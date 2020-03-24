@@ -30,7 +30,8 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
     MyDBHandler dbHandler;
     Projects project;
     java.util.Date testDate = new java.util.Date();
-    Button addButton;
+    Button addButton, deadlineButton;
+
 
 
     @Override
@@ -40,13 +41,13 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         projectname = (EditText) findViewById(R.id.projectname);
         reps = (EditText) findViewById(R.id.reps);
         dbHandler = new MyDBHandler(this, null, null, 1);
-        showDeadline = (TextView) findViewById(R.id.showDeadline);
+        deadlineButton = (Button) findViewById(R.id.calender);
         addButton = (Button) findViewById(R.id.addButton) ;
 
         reps.addTextChangedListener(notnull);
         projectname.addTextChangedListener(notnull);
     }
-
+    // This part is for enabling the add-button when everything is filled out
     private TextWatcher notnull = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -68,14 +69,23 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
 
     // ATTENTION : Always give views a parameter so the onClick - Methods can be used
    public void addButtonClicked(View view){
-
+        int repsAsInt = Integer.parseInt(reps.getText().toString());
+        // Before the addButton is clicked:
+       //           -> is the deadline after today?
+       //           -> are the reps over 0 ?
         if(testDate.before(new Date())){
-            showToast("Use a Deadline AFTER today, you stupid lil fish");
-            showDeadline.setText("");
+            showToast("Use a Deadline AFTER today");
+            deadlineButton.setHint("Deadline");
+        }
+        else if(repsAsInt <= 0){
+            reps.setText("");
+            reps.setError("Reps can not be zero");
         }
         else {
             // Add projects to database
-            project = new Projects(projectname.getText().toString(), Integer.parseInt(reps.getText().toString()), testDate);
+            // if project is already in DB (since the primary key is the name)
+            // the DB throws a SQL Error and this method throws an error on the EditText
+            project = new Projects(projectname.getText().toString(), repsAsInt, testDate);
             try {
                 dbHandler.addProject(project);
                 // show a message
@@ -95,31 +105,23 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         DialogFragment datePicker = new com.example.savedataex.DatePickerFragment();
         datePicker.show(getSupportFragmentManager(), "date picker");
     }
+    // This section is for opening the Calender
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(c.getTime());
-
-        TextView showdeadline = (TextView) findViewById(R.id.showDeadline);
-
-        showdeadline.setText(currentDateString);
-
         testDate = c.getTime();
-
+        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(c.getTime());
+        deadlineButton.setHint(currentDateString);
     }
 
-    public void deleteButtonClicked(View view){
-        dbHandler.deleteProduct(projectname.getText().toString());
-        resetTextViews();
-    }
-
+    // Resets every view and the deadline
     public void resetTextViews(){
         projectname.setText(""); // Set the projectname field to "" after pressing the button
         reps.setText("");
-        showDeadline.setText("");
+        deadlineButton.setHint("Deadline");
     }
 
     private void showToast(String string){

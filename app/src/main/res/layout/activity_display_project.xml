@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/displayLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -16,8 +17,7 @@
         android:layout_marginTop="30dp"
         android:text="hallo"
         android:textSize="50sp"
-        android:textStyle="bold">
-    </TextView>
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/d_days_left"
@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="welt"
-        android:textStyle="italic"
-        android:textSize="15sp">
+        android:textSize="15sp"
+        android:textStyle="italic">
 
     </TextView>
 
@@ -42,11 +42,10 @@
 
     <TextView
         android:id="@+id/d_reps"
-        android:textSize="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        >
+        android:textSize="15dp">
 
     </TextView>
 
@@ -54,10 +53,9 @@
         android:id="@+id/how_much"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="How Much?"
-        android:inputType="number"
         android:layout_marginTop="100dp"
-        >
+        android:hint="How Much?"
+        android:inputType="number">
 
     </EditText>
 
@@ -67,10 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:background="#00050A"
+        android:onClick="submitButtonClicked"
         android:text=" SUBMIT "
         android:textColor="#74C804"
-        android:textSize="40sp"
-        android:onClick="submitButtonClicked">
+        android:textSize="40sp">
 
     </Button>
 
